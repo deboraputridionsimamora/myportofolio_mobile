@@ -44,3 +44,18 @@ flutter run -d chrome
 ```
 flutter analyze
 ```
+
+## Struktur Kode
+
+- `lib/main.dart`: titik masuk aplikasi (`main()`), `MyApp`, dan pengaturan tema.
+- `lib/menu.dart`: halaman menu utama `MyHomePage`, widget `InfoCard` dan `ItemCard`, serta model data `ItemHomepage`.
+
+## Progres Mingguan
+
+### Tutorial 08
+
+Memasang Flutter SDK secara manual di Windows (ekstrak zip dan daftarkan `flutter\bin` ke PATH) dan Android Studio beserta Android SDK. `flutter doctor` sudah centang hijau untuk Flutter, Android toolchain, dan Chrome. Peringatan Visual Studio saya abaikan karena hanya dibutuhkan untuk aplikasi desktop Windows. Setelah itu saya membuat proyek `myportofolio_mobile`, menjalankannya di Chrome, memisahkan halaman menu ke `menu.dart`, mengubah `MyHomePage` menjadi `StatelessWidget`, mengganti tema warna, membuat widget `InfoCard` dan `ItemCard`, menambahkan `SnackBar`, menjalankan `flutter analyze` (No issues found), lalu push ke GitHub.
+
+### Individual Assignment 7
+
+Mengganti data contoh (Burhan) dengan data saya sendiri, mengganti tombol menu dengan tombol yang sesuai portofolio saya (Lihat Certification, Tambah Certification, Logout), dan menambahkan atribut `color` pada model `ItemHomepage` sehingga tiap tombol punya warna latar sendiri tanpa percabangan `if-else`. `flutter analyze` tetap bersih.
