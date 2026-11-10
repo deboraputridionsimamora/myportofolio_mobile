@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
 
-// halaman menu utama, sekarang StatelessWidget karena isinya tetap (gak ada state yang berubah)
+// halaman menu utama, StatelessWidget karena isinya tetap (gak ada state yang berubah)
 class MyHomePage extends StatelessWidget {
   MyHomePage({super.key});
 
-  // data pemilik portofolio (sementara pakai data contoh dari tutorial)
-  final String npm = "2406000001";
-  final String nama = "Burhan";
+  // data pemilik portofolio
+  final String npm = "2506544126";
+  final String nama = "Debora Putri Dion Simamora";
   final String kelas = "PBP A";
 
   // daftar tombol menu yang mau ditampilkan
   final List<ItemHomepage> items = [
-    ItemHomepage("Lihat Proyek", Icons.folder),
-    ItemHomepage("Tambah Proyek", Icons.add_circle),
+    ItemHomepage("Lihat Certification", Icons.workspace_premium),
+    ItemHomepage("Tambah Certification", Icons.add_circle),
     ItemHomepage("Logout", Icons.logout),
   ];
 
@@ -112,7 +112,8 @@ class InfoCard extends StatelessWidget {
               style: const TextStyle(fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 8.0),
-            Text(content),
+            // textAlign center biar nama yang panjang tetap rapi di tengah
+            Text(content, textAlign: TextAlign.center),
           ],
         ),
       ),
