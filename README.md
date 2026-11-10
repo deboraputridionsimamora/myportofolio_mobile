@@ -14,6 +14,7 @@ Aplikasi mobile Flutter untuk portofolio pribadi, dibuat untuk mata kuliah Pemro
   - Tambah Certification (hijau)
   - Logout (merah)
 - Saat tombol ditekan, muncul `SnackBar` dengan pesan "Kamu telah menekan tombol [Nama Tombol]!".
+- Tombol Lihat Certification juga menampilkan dialog (`AlertDialog`) berisi daftar sertifikat saya. Fitur ini dikerjakan di branch `feat/certification-dialog` lalu di-merge ke `main`.
 - Tombol-tombol ini baru menampilkan `SnackBar`. Belum tersambung ke API Django, itu rencana untuk tahap berikutnya.
 
 ## Cara Menjalankan (Setup)
@@ -126,6 +127,7 @@ Claude (Anthropic), dipakai lewat satu sesi chat yang sama dari awal instalasi s
 - Memandu instalasi Flutter SDK dan Android Studio langkah demi langkah, serta membantu membaca hasil `flutter doctor`.
 - Membantu mencari penyebab error yang saya temui (PATH yang belum terbaca, dan folder Flutter yang tidak bisa dihapus karena masalah izin).
 - Menuliskan kode `lib/main.dart` dan `lib/menu.dart`. Kodenya mengikuti contoh di modul Tutorial 08 dan petunjuk Individual Assignment 7, lalu disesuaikan dengan data, nama tombol, dan warna.
+- Menuliskan kode fitur tambahan dialog daftar sertifikat (`AlertDialog`, model `CertificationItem`, dan parameter `onTap` pada `ItemHomepage`).
 - Menjelaskan perintah Git dan membaca keluarannya bersama saya.
 - Membuat draft jawaban pertanyaan reflektif (Tugas 7) dan draft README ini.
 
@@ -134,6 +136,7 @@ Claude (Anthropic), dipakai lewat satu sesi chat yang sama dari awal instalasi s
 - Menjalankan semua instalasi dan perintah di laptop saya sendiri: download dan ekstrak Flutter, mengatur PATH, `flutter doctor`, `flutter create`, `flutter run`, dan `flutter analyze`.
 - Membuat repositori GitHub `myportofolio_mobile`, menempelkan kode ke VS Code, menjalankan aplikasi di Chrome, dan mengecek tampilannya.
 - Melakukan `git add`, `commit`, dan `push`, serta submit ke SCELE.
+- Membuat branch `feat/certification-dialog`, menguji dialog di Chrome, menjalankan `flutter analyze`, lalu merge ke `main`.
 - Menentukan data diri yang dipakai dan memilih tema "Certification" untuk tombol menu karena itu bagian portofolio Django saya.
 - Meminta langkah yang lebih jelas ketika petunjuk terasa membingungkan, meminta README dikerjakan bertahap, dan meminta riwayat commit dipisah ulang supaya perubahan data diri dan warna tidak tergabung dalam satu commit.
 
@@ -170,4 +173,9 @@ Saya mengunggah PDF modul dan meminta dipandu langkah demi langkah. Setiap ada e
 
 ### Keterbatasan AI dan catatan
 
-Meskipun sangat membantu dalam proses pengembangan, terdapat keterbatasan utama dari AI (Claude) karena tidak memiliki akses langsung untuk melihat atau mengeksekusi kode di lingkungan lokal laptop saya. AI sempat memberikan instruksi yang kurang spesifik terkait alur kerja dan navigasi UI—seperti lokasi pasti menu terminal di VS Code—serta mengasumsikan posisi direktori terminal tanpa memverifikasinya terlebih dahulu, yang menyebabkan beberapa perintah awal sempat gagal. Selain itu, AI tidak secara otomatis menerapkan *best practice* manajemen Git, seperti ketika menggabungkan perubahan data diri dan warna ke dalam satu *commit*, sehingga validasi manual, pengujian lewat `flutter analyze`, serta arahan ulang dari saya tetap mutlak diperlukan untuk memastikan keakuratan kode dan kerapihan riwayat *commit*.
+D- Daftar sertifikat di dialog masih ditulis manual di kode (`lib/menu.dart`), belum diambil dari database atau API Django, sehingga kalau data di website berubah, daftar di aplikasi harus diubah manual.
+- AI (Claude) tidak bisa melihat atau menjalankan kode di laptop saya, jadi kodenya baru terbukti jalan setelah saya menjalankannya sendiri dan `flutter analyze` menyatakan "No issues found".
+- AI sempat memberikan instruksi yang kurang spesifik soal alur kerja dan navigasi, misalnya lokasi menu terminal di VS Code dan posisi direktori terminal yang tidak diverifikasi dulu, sehingga beberapa perintah awal sempat gagal atau salah tempat.
+- Rencana awal dua commit bertahap (data diri dulu, lalu warna) ternyata menjadi satu commit, karena kode yang saya tempel sudah termasuk warna. Setelah saya minta, riwayatnya dipisah ulang dengan force push. Commit Tutorial 08 tidak terpengaruh.
+- Jawaban pertanyaan reflektif didraft oleh AI, bukan sepenuhnya ditulis dengan kata-kata saya sendiri.
+- Karena itu, pengecekan manual (menjalankan aplikasi, `flutter analyze`, dan memeriksa riwayat commit) tetap saya lakukan sendiri.
