@@ -1,17 +1,46 @@
-# myportofolio_mobile
+# MyPortfolio Mobile
 
-A new Flutter project.
+Aplikasi mobile Flutter untuk portofolio pribadi, dibuat untuk mata kuliah Pemrograman Berbasis Platform (CSGE602022), Fasilkom UI, Semester Gasal 2026/2027. Proyek ini adalah lanjutan dari website portofolio Django saya (repositori terpisah bernama `myportofolio`).
 
-## Getting Started
+**Nama:** Debora Putri Dion Simamora
+**NPM:** 2506544126
+**Kelas:** PBP A
 
-This project is a starting point for a Flutter application.
+## Fitur Saat Ini
 
-A few resources to get you started if this is your first Flutter project:
+- Halaman utama dengan 3 kartu informasi (`InfoCard`): NPM, Name, dan Class.
+- 3 tombol menu (`ItemCard`) dengan warna latar berbeda:
+  - Lihat Certification (biru)
+  - Tambah Certification (hijau)
+  - Logout (merah)
+- Saat tombol ditekan, muncul `SnackBar` dengan pesan "Kamu telah menekan tombol [Nama Tombol]!".
+- Tombol-tombol ini baru menampilkan `SnackBar`. Belum tersambung ke API Django, itu rencana untuk tahap berikutnya.
 
-- [Learn Flutter](https://docs.flutter.dev/get-started/learn-flutter)
-- [Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Flutter learning resources](https://docs.flutter.dev/reference/learning-resources)
+## Cara Menjalankan (Setup)
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+Prasyarat: Flutter SDK (stable) dan Google Chrome. Android Studio hanya dibutuhkan kalau mau memakai emulator Android.
+
+1. Clone repositori ini:
+
+```
+git clone https://github.com/deboraputridionsimamora/myportofolio_mobile.git
+cd myportofolio_mobile
+```
+
+2. Ambil dependensi:
+
+```
+flutter pub get
+```
+
+3. Jalankan di Chrome:
+
+```
+flutter run -d chrome
+```
+
+4. Cek kualitas kode:
+
+```
+flutter analyze
+```
