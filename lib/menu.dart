@@ -9,11 +9,11 @@ class MyHomePage extends StatelessWidget {
   final String nama = "Debora Putri Dion Simamora";
   final String kelas = "PBP A";
 
-  // daftar tombol menu yang mau ditampilkan
+  // daftar tombol menu, tiap tombol punya warna sendiri
   final List<ItemHomepage> items = [
-    ItemHomepage("Lihat Certification", Icons.workspace_premium),
-    ItemHomepage("Tambah Certification", Icons.add_circle),
-    ItemHomepage("Logout", Icons.logout),
+    ItemHomepage("Lihat Certification", Icons.workspace_premium, Colors.blue),
+    ItemHomepage("Tambah Certification", Icons.add_circle, Colors.green),
+    ItemHomepage("Logout", Icons.logout, Colors.red),
   ];
 
   @override
@@ -121,12 +121,13 @@ class InfoCard extends StatelessWidget {
   }
 }
 
-// model data buat satu tombol menu (nama tombol dan ikonnya)
+// model data buat satu tombol menu (nama tombol, ikon, dan warna latarnya)
 class ItemHomepage {
   final String name;
   final IconData icon;
+  final Color color;
 
-  ItemHomepage(this.name, this.icon);
+  ItemHomepage(this.name, this.icon, this.color);
 }
 
 // widget kartu tombol, kalau ditekan muncul SnackBar
@@ -138,8 +139,8 @@ class ItemCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Material(
-      // pakai warna secondary dari tema aplikasi
-      color: Theme.of(context).colorScheme.secondary,
+      // warna latar diambil dari tiap item biar beda-beda
+      color: item.color,
       borderRadius: BorderRadius.circular(12),
       child: InkWell(
         // aksi pas kartu ditekan
