@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:myportofolio_mobile/screens/certification_form.dart';
 import 'package:myportofolio_mobile/screens/menu.dart';
+import 'package:myportofolio_mobile/screens/project_form.dart';
 
-/// Kartu tombol menu. Kalau ditekan muncul SnackBar, dan aksi tambahan kalau ada.
+/// Kartu tombol menu. Kalau ditekan muncul SnackBar, lalu pindah halaman kalau tombolnya perlu.
 class ItemCard extends StatelessWidget {
   final ItemHomepage item;
 
@@ -24,7 +26,23 @@ class ItemCard extends StatelessWidget {
                 content: Text("Kamu telah menekan tombol ${item.name}!"),
               ),
             );
-          // kalau tombol ini punya aksi tambahan, jalankan juga
+
+          // pindah ke halaman yang sesuai, dicek lewat nama tombolnya
+          if (item.name == "Tambah Proyek") {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const ProjectFormPage()),
+            );
+          } else if (item.name == "Tambah Certification") {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const CertificationFormPage(),
+              ),
+            );
+          }
+
+          // kalau tombol ini punya aksi tambahan (misal dialog sertifikat), jalankan juga
           item.onTap?.call(context);
         },
         child: Container(

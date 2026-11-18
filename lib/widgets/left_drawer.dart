@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:myportofolio_mobile/screens/certification_form.dart';
 import 'package:myportofolio_mobile/screens/menu.dart';
 import 'package:myportofolio_mobile/screens/project_form.dart';
 
@@ -44,7 +45,7 @@ class LeftDrawer extends StatelessWidget {
               );
             },
           ),
-          // menu Add Project: pindah ke halaman form
+          // menu Add Project: pindah ke halaman form proyek
           ListTile(
             leading: const Icon(Icons.add_circle_outline),
             title: const Text('Add Project'),
@@ -53,6 +54,19 @@ class LeftDrawer extends StatelessWidget {
                 context,
                 MaterialPageRoute(
                   builder: (context) => const ProjectFormPage(),
+                ),
+              );
+            },
+          ),
+          // menu Add Certification: pindah ke halaman form sertifikat
+          ListTile(
+            leading: const Icon(Icons.workspace_premium_outlined),
+            title: const Text('Add Certification'),
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const CertificationFormPage(),
                 ),
               );
             },
