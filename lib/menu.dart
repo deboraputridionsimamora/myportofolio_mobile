@@ -1,3 +1,4 @@
+import 'package:myportofolio_mobile/widgets/left_drawer.dart';
 import 'package:flutter/material.dart';
 
 /// Halaman menu utama aplikasi. Pakai StatelessWidget karena tampilannya tetap.
@@ -30,13 +31,12 @@ class MyHomePage extends StatelessWidget {
       appBar: AppBar(
         title: const Text(
           'MyPortfolio',
-          style: TextStyle(
-            color: Colors.white,
-            fontWeight: FontWeight.bold,
-          ),
+          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
         ),
         backgroundColor: Theme.of(context).colorScheme.primary,
+        iconTheme: const IconThemeData(color: Colors.white),
       ),
+      drawer: const LeftDrawer(),
       // body halaman utama, dikasih padding biar gak mepet pinggir
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -112,10 +112,7 @@ class InfoCard extends StatelessWidget {
         // susun teks title dan content ke bawah
         child: Column(
           children: [
-            Text(
-              title,
-              style: const TextStyle(fontWeight: FontWeight.bold),
-            ),
+            Text(title, style: const TextStyle(fontWeight: FontWeight.bold)),
             const SizedBox(height: 8.0),
             // textAlign center biar nama yang panjang tetap rapi di tengah
             Text(content, textAlign: TextAlign.center),
@@ -157,7 +154,9 @@ class ItemCard extends StatelessWidget {
           ScaffoldMessenger.of(context)
             ..hideCurrentSnackBar()
             ..showSnackBar(
-              SnackBar(content: Text("Kamu telah menekan tombol ${item.name}!")),
+              SnackBar(
+                content: Text("Kamu telah menekan tombol ${item.name}!"),
+              ),
             );
           // kalau tombol ini punya aksi tambahan, jalankan juga
           item.onTap?.call(context);
@@ -168,11 +167,7 @@ class ItemCard extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Icon(
-                  item.icon,
-                  color: Colors.white,
-                  size: 30.0,
-                ),
+                Icon(item.icon, color: Colors.white, size: 30.0),
                 const Padding(padding: EdgeInsets.all(3)),
                 Text(
                   item.name,
@@ -198,7 +193,10 @@ class CertificationItem {
 
 // daftar sertifikat (samain dengan yang ada di website portofolio Django)
 const List<CertificationItem> certifications = [
-  CertificationItem("TOEFL ITP", "Educational Testing Service (ETS) Global B.V."),
+  CertificationItem(
+    "TOEFL ITP",
+    "Educational Testing Service (ETS) Global B.V.",
+  ),
   CertificationItem(
     "Finalist 9th International Science Olympiad in Mathematics",
     "International Science Olympiad",
