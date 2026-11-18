@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:myportofolio_mobile/screens/project_form.dart';
 import 'package:myportofolio_mobile/widgets/left_drawer.dart';
 import 'package:myportofolio_mobile/widgets/project_card.dart';
 
@@ -13,7 +12,8 @@ class MyHomePage extends StatelessWidget {
   final String kelas = "PBP A";
 
   // daftar tombol menu, tiap tombol punya warna sendiri
-  // tombol Certification punya aksi tambahan: nampilin dialog daftar sertifikat
+  // tombol Lihat Certification punya aksi tambahan: nampilin dialog daftar sertifikat
+  // pindah halaman buat tombol Tambah dikerjain di ItemCard (project_card.dart)
   final List<ItemHomepage> items = [
     ItemHomepage(
       "Lihat Certification",
@@ -22,18 +22,7 @@ class MyHomePage extends StatelessWidget {
       onTap: showCertificationDialog,
     ),
     ItemHomepage("Tambah Certification", Icons.add_circle, Colors.green),
-    ItemHomepage(
-      "Tambah Proyek",
-      Icons.add_circle,
-      Colors.orange,
-      onTap: (context) {
-        // pindah ke halaman form, bisa balik pakai tombol Back
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => const ProjectFormPage()),
-        );
-      },
-    ),
+    ItemHomepage("Tambah Proyek", Icons.add_circle, Colors.orange),
     ItemHomepage("Logout", Icons.logout, Colors.red),
   ];
 
