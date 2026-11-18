@@ -1,6 +1,6 @@
-import 'package:myportofolio_mobile/project_form.dart';
 import 'package:flutter/material.dart';
-import 'package:myportofolio_mobile/menu.dart';
+import 'package:myportofolio_mobile/screens/menu.dart';
+import 'package:myportofolio_mobile/screens/project_form.dart';
 
 // menu samping (drawer) buat pindah-pindah halaman
 class LeftDrawer extends StatelessWidget {
@@ -44,7 +44,7 @@ class LeftDrawer extends StatelessWidget {
               );
             },
           ),
-          // menu Add Project: tujuannya diisi nanti pas halaman form sudah jadi
+          // menu Add Project: pindah ke halaman form
           ListTile(
             leading: const Icon(Icons.add_circle_outline),
             title: const Text('Add Project'),
