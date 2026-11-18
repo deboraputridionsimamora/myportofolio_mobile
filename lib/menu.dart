@@ -1,3 +1,4 @@
+import 'package:myportofolio_mobile/project_form.dart';
 import 'package:myportofolio_mobile/widgets/left_drawer.dart';
 import 'package:flutter/material.dart';
 
@@ -20,6 +21,18 @@ class MyHomePage extends StatelessWidget {
       onTap: showCertificationDialog,
     ),
     ItemHomepage("Tambah Certification", Icons.add_circle, Colors.green),
+    ItemHomepage(
+      "Tambah Proyek",
+      Icons.add_circle,
+      Colors.orange,
+      onTap: (context) {
+        // pindah ke halaman form, bisa balik pakai tombol Back
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => const ProjectFormPage()),
+        );
+      },
+    ),
     ItemHomepage("Logout", Icons.logout, Colors.red),
   ];
 

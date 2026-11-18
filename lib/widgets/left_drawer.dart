@@ -1,3 +1,4 @@
+import 'package:myportofolio_mobile/project_form.dart';
 import 'package:flutter/material.dart';
 import 'package:myportofolio_mobile/menu.dart';
 
@@ -47,7 +48,14 @@ class LeftDrawer extends StatelessWidget {
           ListTile(
             leading: const Icon(Icons.add_circle_outline),
             title: const Text('Add Project'),
-            onTap: () {},
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const ProjectFormPage(),
+                ),
+              );
+            },
           ),
         ],
       ),
