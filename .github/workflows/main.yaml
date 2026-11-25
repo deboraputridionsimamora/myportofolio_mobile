@@ -1,0 +1,45 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  # cek format, analyze, dan tes pakai workflow siap pakai dari Very Good Ventures
+  build:
+    uses: VeryGoodOpenSource/very_good_workflows/.github/workflows/flutter_package.yml@v2
+    with:
+      flutter_channel: stable
+      min_coverage: 0
+      # file *.g.dart tidak ikut di git, jadi dibuat dulu sebelum format, analyze, dan tes
+      setup: dart run build_runner build
+
+  # bikin file APK release dan upload sebagai artifact
+  build_apk:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          cache: true
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Generate json_serializable code
+        run: dart run build_runner build
+
+      - name: Build release APK
+        run: flutter build apk --release --dart-define=API_BASE_URL=https://debora-putri-myportofolio.pws.cs.ui.ac.id
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: app-release-apk
+          path: build/app/outputs/flutter-apk/app-release.apk
