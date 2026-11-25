@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:myportofolio_mobile/screens/menu.dart';
+import 'package:myportofolio_mobile/services/api_client.dart';
+import 'package:myportofolio_mobile/services/auth_state.dart';
+import 'package:provider/provider.dart';
 
 void main() {
   runApp(const MyApp());
@@ -10,17 +13,27 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'MyPortfolio',
-      theme: ThemeData(
-        // warna dasar indigo, warna secondary diganti amber biar kartu tombolnya beda
-        colorScheme: ColorScheme.fromSeed(
-          seedColor: Colors.indigo,
-          secondary: Colors.amber[700],
+    // ApiClient dan AuthState dibuat sekali, dibagi ke semua layar lewat Provider
+    return MultiProvider(
+      providers: [
+        Provider<ApiClient>(
+          create: (_) => ApiClient(),
+          dispose: (_, client) => client.close(),
         ),
-        useMaterial3: true,
+        ChangeNotifierProvider<AuthState>(create: (_) => AuthState()),
+      ],
+      child: MaterialApp(
+        title: 'MyPortfolio',
+        theme: ThemeData(
+          // warna dasar indigo, warna secondary diganti amber biar kartu tombolnya beda
+          colorScheme: ColorScheme.fromSeed(
+            seedColor: Colors.indigo,
+            secondary: Colors.amber[700],
+          ),
+          useMaterial3: true,
+        ),
+        home: MyHomePage(),
       ),
-      home: MyHomePage(),
     );
   }
 }
