@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:myportofolio_mobile/screens/certification_form.dart';
+import 'package:myportofolio_mobile/screens/certification_list_screen.dart';
 import 'package:myportofolio_mobile/screens/menu.dart';
 import 'package:myportofolio_mobile/screens/project_form.dart';
 
@@ -42,6 +43,19 @@ class LeftDrawer extends StatelessWidget {
               Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(builder: (context) => MyHomePage()),
+              );
+            },
+          ),
+          // menu Lihat Certification: pindah ke daftar sertifikat dari API
+          ListTile(
+            leading: const Icon(Icons.list_alt),
+            title: const Text('Lihat Certification'),
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const CertificationListScreen(),
+                ),
               );
             },
           ),

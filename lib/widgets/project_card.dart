@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:myportofolio_mobile/screens/certification_form.dart';
+import 'package:myportofolio_mobile/screens/certification_list_screen.dart';
 import 'package:myportofolio_mobile/screens/menu.dart';
 import 'package:myportofolio_mobile/screens/project_form.dart';
 
@@ -28,7 +29,14 @@ class ItemCard extends StatelessWidget {
             );
 
           // pindah ke halaman yang sesuai, dicek lewat nama tombolnya
-          if (item.name == "Tambah Proyek") {
+          if (item.name == "Lihat Certification") {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const CertificationListScreen(),
+              ),
+            );
+          } else if (item.name == "Tambah Proyek") {
             Navigator.push(
               context,
               MaterialPageRoute(builder: (context) => const ProjectFormPage()),
@@ -42,7 +50,7 @@ class ItemCard extends StatelessWidget {
             );
           }
 
-          // kalau tombol ini punya aksi tambahan (misal dialog sertifikat), jalankan juga
+          // kalau tombol ini punya aksi tambahan, jalankan juga
           item.onTap?.call(context);
         },
         child: Container(

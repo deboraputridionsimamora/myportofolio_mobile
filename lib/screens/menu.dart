@@ -12,15 +12,9 @@ class MyHomePage extends StatelessWidget {
   final String kelas = "PBP A";
 
   // daftar tombol menu, tiap tombol punya warna sendiri
-  // tombol Lihat Certification punya aksi tambahan: nampilin dialog daftar sertifikat
-  // pindah halaman buat tombol Tambah dikerjain di ItemCard (project_card.dart)
+  // pindah halaman dikerjain di ItemCard (project_card.dart)
   final List<ItemHomepage> items = [
-    ItemHomepage(
-      "Lihat Certification",
-      Icons.workspace_premium,
-      Colors.blue,
-      onTap: showCertificationDialog,
-    ),
+    ItemHomepage("Lihat Certification", Icons.workspace_premium, Colors.blue),
     ItemHomepage("Tambah Certification", Icons.add_circle, Colors.green),
     ItemHomepage("Tambah Proyek", Icons.add_circle, Colors.orange),
     ItemHomepage("Logout", Icons.logout, Colors.red),
@@ -136,66 +130,4 @@ class ItemHomepage {
   final void Function(BuildContext context)? onTap;
 
   ItemHomepage(this.name, this.icon, this.color, {this.onTap});
-}
-
-/// Model data satu sertifikat (judul dan penerbit).
-class CertificationItem {
-  final String title;
-  final String issuer;
-
-  const CertificationItem(this.title, this.issuer);
-}
-
-// daftar sertifikat (samain dengan yang ada di website portofolio Django)
-const List<CertificationItem> certifications = [
-  CertificationItem(
-    "TOEFL ITP",
-    "Educational Testing Service (ETS) Global B.V.",
-  ),
-  CertificationItem(
-    "Finalist 9th International Science Olympiad in Mathematics",
-    "International Science Olympiad",
-  ),
-  CertificationItem(
-    "Student Council Executive Committee Appreciation Certificate",
-    "SMA Negeri 3 Medan",
-  ),
-  CertificationItem(
-    "Uji Kemahiran Berbahasa Indonesia (UKBI)",
-    "Badan Pengembangan dan Pembinaan Bahasa",
-  ),
-  CertificationItem("Super Mentor Staff DDP0 2026", "ARUNG 2025"),
-];
-
-/// Nampilin dialog berisi daftar sertifikat.
-void showCertificationDialog(BuildContext context) {
-  showDialog(
-    context: context,
-    builder: (BuildContext dialogContext) {
-      return AlertDialog(
-        title: const Text('Licenses & Certifications'),
-        content: SizedBox(
-          width: double.maxFinite,
-          // ListView biar bisa di-scroll kalau sertifikatnya banyak
-          child: ListView(
-            shrinkWrap: true,
-            children: certifications.map((CertificationItem cert) {
-              return ListTile(
-                leading: const Icon(Icons.workspace_premium),
-                title: Text(cert.title),
-                subtitle: Text(cert.issuer),
-              );
-            }).toList(),
-          ),
-        ),
-        actions: [
-          TextButton(
-            // tutup dialog
-            onPressed: () => Navigator.of(dialogContext).pop(),
-            child: const Text('Tutup'),
-          ),
-        ],
-      );
-    },
-  );
 }
