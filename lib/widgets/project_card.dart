@@ -3,12 +3,34 @@ import 'package:myportofolio_mobile/screens/certification_form.dart';
 import 'package:myportofolio_mobile/screens/certification_list_screen.dart';
 import 'package:myportofolio_mobile/screens/menu.dart';
 import 'package:myportofolio_mobile/screens/project_form.dart';
+import 'package:myportofolio_mobile/services/api_client.dart';
+import 'package:myportofolio_mobile/services/auth_state.dart';
+import 'package:provider/provider.dart';
 
 /// Kartu tombol menu. Kalau ditekan muncul SnackBar, lalu pindah halaman kalau tombolnya perlu.
 class ItemCard extends StatelessWidget {
   final ItemHomepage item;
 
   const ItemCard(this.item, {super.key});
+
+  // logout: kalau belum login cukup kasih info, kalau sudah login hapus sesinya
+  Future<void> _logout(BuildContext context) async {
+    final auth = context.read<AuthState>();
+    final api = context.read<ApiClient>();
+    final messenger = ScaffoldMessenger.of(context);
+
+    if (!auth.isLoggedIn) {
+      messenger
+        ..hideCurrentSnackBar()
+        ..showSnackBar(const SnackBar(content: Text('Kamu belum login.')));
+      return;
+    }
+
+    await auth.logout(api);
+    messenger
+      ..hideCurrentSnackBar()
+      ..showSnackBar(const SnackBar(content: Text('Berhasil logout.')));
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -19,6 +41,12 @@ class ItemCard extends StatelessWidget {
       child: InkWell(
         // aksi pas kartu ditekan
         onTap: () {
+          // Logout punya pesan sendiri, jadi dikerjain terpisah
+          if (item.name == "Logout") {
+            _logout(context);
+            return;
+          }
+
           // munculin SnackBar dengan pesan nama tombol yang ditekan
           ScaffoldMessenger.of(context)
             ..hideCurrentSnackBar()

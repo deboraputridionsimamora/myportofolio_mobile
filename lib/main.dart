@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:myportofolio_mobile/screens/menu.dart';
 import 'package:myportofolio_mobile/services/api_client.dart';
+import 'package:myportofolio_mobile/services/auth_state.dart';
 import 'package:provider/provider.dart';
 
 void main() {
@@ -12,10 +13,15 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // ApiClient dibuat sekali dan dibagi ke semua layar lewat Provider
-    return Provider<ApiClient>(
-      create: (_) => ApiClient(),
-      dispose: (_, client) => client.close(),
+    // ApiClient dan AuthState dibuat sekali, dibagi ke semua layar lewat Provider
+    return MultiProvider(
+      providers: [
+        Provider<ApiClient>(
+          create: (_) => ApiClient(),
+          dispose: (_, client) => client.close(),
+        ),
+        ChangeNotifierProvider<AuthState>(create: (_) => AuthState()),
+      ],
       child: MaterialApp(
         title: 'MyPortfolio',
         theme: ThemeData(
