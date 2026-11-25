@@ -13,6 +13,8 @@ jobs:
     uses: VeryGoodOpenSource/very_good_workflows/.github/workflows/flutter_package.yml@v2
     with:
       flutter_channel: stable
+      # versi dikunci sama kayak di laptop, biar hasil CI dan lokal selalu sama
+      flutter_version: "3.47.9"
       min_coverage: 0
       # file *.g.dart tidak ikut di git, jadi dibuat dulu sebelum format, analyze, dan tes
       setup: dart run build_runner build
@@ -27,6 +29,7 @@ jobs:
       - uses: subosito/flutter-action@v2
         with:
           channel: stable
+          flutter-version: "3.47.9"
           cache: true
 
       - name: Install dependencies
