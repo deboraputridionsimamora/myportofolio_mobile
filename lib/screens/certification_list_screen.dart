@@ -28,7 +28,7 @@ class _CertificationListScreenState extends State<CertificationListScreen> {
     _future = _api.getCertifications();
   }
 
-  // dipanggil pas tombol Retry ditekan
+  // dipanggil pas tombol Retry ditekan, atau pas balik dari layar detail
   void _retry() {
     setState(() {
       _future = _api.getCertifications();
@@ -130,14 +130,18 @@ class _CertificationListScreenState extends State<CertificationListScreen> {
                         Text('${cert.starCount}'),
                       ],
                     ),
-                    onTap: () {
-                      Navigator.push(
+                    onTap: () async {
+                      await Navigator.push(
                         context,
                         MaterialPageRoute(
                           builder: (context) =>
                               CertificationDetailScreen(certification: cert),
                         ),
                       );
+                      // balik dari detail: ambil ulang daftar karena bisa jadi
+                      // sertifikatnya habis diedit atau dihapus
+                      if (!mounted) return;
+                      _retry();
                     },
                   ),
                 );

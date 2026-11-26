@@ -24,6 +24,8 @@ class MyApp extends StatelessWidget {
       ],
       child: MaterialApp(
         title: 'MyPortfolio',
+        // sembunyiin pita DEBUG di pojok kanan atas biar gak nutupin tombol
+        debugShowCheckedModeBanner: false,
         theme: ThemeData(
           // warna dasar indigo, warna secondary diganti amber biar kartu tombolnya beda
           colorScheme: ColorScheme.fromSeed(

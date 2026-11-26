@@ -104,5 +104,69 @@ void main() {
         );
       },
     );
+
+    test('updateCertification ngirim PATCH ke alamat detail', () async {
+      final client = MockClient((request) async {
+        expect(request.method, 'PATCH');
+        expect(request.url.toString(), '$baseUrl/api/v1/certifications/1/');
+        expect(request.headers['Authorization'], 'Token abc123');
+        final body = jsonDecode(request.body) as Map<String, dynamic>;
+        expect(body['title'], 'TOEFL iBT');
+        expect(body['password'], 'rahasia');
+        return http.Response(
+          jsonEncode({...sampleJson, 'title': 'TOEFL iBT'}),
+          200,
+        );
+      });
+      final api = ApiClient(client: client, baseUrl: baseUrl);
+
+      final updated = await api.updateCertification(
+        1,
+        const Certification(
+          title: 'TOEFL iBT',
+          issuer: 'ETS',
+          issueDate: '2024-05-01',
+        ),
+        token: 'abc123',
+        password: 'rahasia',
+      );
+
+      expect(updated.title, 'TOEFL iBT');
+    });
+
+    test('deleteCertification ngirim DELETE dan sukses kalau 204', () async {
+      final client = MockClient((request) async {
+        expect(request.method, 'DELETE');
+        expect(request.url.toString(), '$baseUrl/api/v1/certifications/1/');
+        expect(request.headers['Authorization'], 'Token abc123');
+        final body = jsonDecode(request.body) as Map<String, dynamic>;
+        expect(body['password'], 'rahasia');
+        return http.Response('', 204);
+      });
+      final api = ApiClient(client: client, baseUrl: baseUrl);
+
+      await api.deleteCertification(1, token: 'abc123', password: 'rahasia');
+    });
+
+    test('deleteCertification ngelempar ApiException 400 kalau password form salah', () async {
+      final client = MockClient(
+        (request) async => http.Response(
+          jsonEncode({
+            'password': ['Password salah! Perubahan tidak disimpan.'],
+          }),
+          400,
+        ),
+      );
+      final api = ApiClient(client: client, baseUrl: baseUrl);
+
+      await expectLater(
+        api.deleteCertification(1, token: 'abc123', password: 'salah'),
+        throwsA(
+          isA<ApiException>()
+              .having((e) => e.statusCode, 'statusCode', 400)
+              .having((e) => e.message, 'message', contains('Password salah')),
+        ),
+      );
+    });
   });
 }

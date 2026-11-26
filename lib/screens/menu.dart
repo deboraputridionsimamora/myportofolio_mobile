@@ -22,6 +22,11 @@ class MyHomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // lebar layar dipakai buat nentuin jumlah kolom
+    // layar lebar (laptop) = 4 kolom sebaris, layar sempit (HP) = 2 kolom (2 atas 2 bawah)
+    final double lebarLayar = MediaQuery.of(context).size.width;
+    final int jumlahKolom = lebarLayar >= 800 ? 4 : 2;
+
     // Scaffold ngasih kerangka halaman (AppBar, body, SnackBar)
     return Scaffold(
       // AppBar = bar di bagian atas halaman
@@ -34,28 +39,36 @@ class MyHomePage extends StatelessWidget {
         iconTheme: const IconThemeData(color: Colors.white),
       ),
       drawer: const LeftDrawer(),
-      // body halaman utama, dikasih padding biar gak mepet pinggir
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            // baris horizontal buat 3 InfoCard sejajar
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                InfoCard(title: 'NPM', content: npm),
-                InfoCard(title: 'Name', content: nama),
-                InfoCard(title: 'Class', content: kelas),
-              ],
-            ),
-
-            const SizedBox(height: 16.0),
-
-            // bagian tengah: tulisan sambutan dan kotak-kotak tombol menu
-            Center(
+      // SingleChildScrollView biar halaman bisa di-scroll kalau layarnya pendek
+      body: SingleChildScrollView(
+        // Center + ConstrainedBox biar isinya gak melebar banget di layar besar
+        child: Center(
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(maxWidth: 1100),
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
+                  // baris horizontal buat 3 InfoCard sejajar, tiap kartu dapet lebar sama
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Expanded(
+                        child: InfoCard(title: 'NPM', content: npm),
+                      ),
+                      Expanded(
+                        child: InfoCard(title: 'Name', content: nama),
+                      ),
+                      Expanded(
+                        child: InfoCard(title: 'Class', content: kelas),
+                      ),
+                    ],
+                  ),
+
+                  const SizedBox(height: 16.0),
+
+                  // bagian tengah: tulisan sambutan dan kotak-kotak tombol menu
                   const Padding(
                     padding: EdgeInsets.only(top: 16.0),
                     child: Text(
@@ -67,15 +80,18 @@ class MyHomePage extends StatelessWidget {
                     ),
                   ),
 
-                  // GridView buat nampilin kartu tombol dalam bentuk kotak-kotak 3 kolom
+                  // GridView: jumlah kolomnya ngikutin lebar layar (4 atau 2)
                   GridView.count(
-                    primary: true,
                     padding: const EdgeInsets.all(20),
                     crossAxisSpacing: 10,
                     mainAxisSpacing: 10,
-                    crossAxisCount: 3,
+                    crossAxisCount: jumlahKolom,
+                    // 4 kolom kartunya lebih kecil, jadi rasionya dibedain biar tinggi pas
+                    childAspectRatio: jumlahKolom == 4 ? 1.3 : 1.5,
                     // shrinkWrap biar tinggi grid ngikutin isinya
                     shrinkWrap: true,
+                    // scroll-nya diserahin ke SingleChildScrollView di atas
+                    physics: const NeverScrollableScrollPhysics(),
                     children: items.map((ItemHomepage item) {
                       return ItemCard(item);
                     }).toList(),
@@ -83,7 +99,7 @@ class MyHomePage extends StatelessWidget {
                 ],
               ),
             ),
-          ],
+          ),
         ),
       ),
     );
@@ -103,8 +119,7 @@ class InfoCard extends StatelessWidget {
       // kasih bayangan tipis
       elevation: 2.0,
       child: Container(
-        // lebar kartu menyesuaikan lebar layar (dibagi 3.5)
-        width: MediaQuery.of(context).size.width / 3.5,
+        // lebarnya ngikutin Expanded dari Row di atas
         padding: const EdgeInsets.all(16.0),
         // susun teks title dan content ke bawah
         child: Column(

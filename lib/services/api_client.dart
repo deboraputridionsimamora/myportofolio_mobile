@@ -68,15 +68,41 @@ class ApiClient {
         body: body,
       ),
     );
-    try {
-      return Certification.fromJson(
-        jsonDecode(utf8.decode(response.bodyBytes)) as Map<String, dynamic>,
-      );
-    } on FormatException {
-      throw const ApiException('Format respons server tidak sesuai.');
-    } on TypeError {
-      throw const ApiException('Format respons server tidak sesuai.');
-    }
+    return _parseCertification(response);
+  }
+
+  /// PATCH: ubah sertifikat yang sudah ada. Butuh token dan password form.
+  Future<Certification> updateCertification(
+    int id,
+    Certification certification, {
+    required String token,
+    required String password,
+  }) async {
+    final body = jsonEncode({...certification.toJson(), 'password': password});
+    final response = await _send(
+      () => _client.patch(
+        _uri('/api/v1/certifications/$id/'),
+        headers: _headers(token: token),
+        body: body,
+      ),
+    );
+    return _parseCertification(response);
+  }
+
+  /// DELETE: hapus sertifikat. Butuh token dan password form.
+  /// Server balas 204 (tanpa isi), jadi gak ada yang dikembalikan.
+  Future<void> deleteCertification(
+    int id, {
+    required String token,
+    required String password,
+  }) async {
+    await _send(
+      () => _client.delete(
+        _uri('/api/v1/certifications/$id/'),
+        headers: _headers(token: token),
+        body: jsonEncode({'password': password}),
+      ),
+    );
   }
 
   /// Login: tukar username + password dengan token.
@@ -118,6 +144,19 @@ class ApiClient {
   }
 
   void close() => _client.close();
+
+  // ubah isi respons jadi satu objek Certification
+  Certification _parseCertification(http.Response response) {
+    try {
+      return Certification.fromJson(
+        jsonDecode(utf8.decode(response.bodyBytes)) as Map<String, dynamic>,
+      );
+    } on FormatException {
+      throw const ApiException('Format respons server tidak sesuai.');
+    } on TypeError {
+      throw const ApiException('Format respons server tidak sesuai.');
+    }
+  }
 
   // jalanin request, ubah error jaringan jadi ApiException
   Future<http.Response> _send(Future<http.Response> Function() request) async {
