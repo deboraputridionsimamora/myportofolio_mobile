@@ -7,9 +7,13 @@ import 'package:myportofolio_mobile/widgets/auth_guard.dart';
 import 'package:myportofolio_mobile/widgets/left_drawer.dart';
 import 'package:provider/provider.dart';
 
-/// Halaman form buat nambah sertifikat baru, datanya dikirim ke backend Django.
+/// Halaman form buat nambah sertifikat baru, atau ngedit sertifikat yang sudah ada
+/// (kalau parameter certification diisi). Datanya dikirim ke backend Django.
 class CertificationFormPage extends StatefulWidget {
-  const CertificationFormPage({super.key});
+  const CertificationFormPage({super.key, this.certification});
+
+  // kosong = mode tambah, isi = mode edit
+  final Certification? certification;
 
   @override
   State<CertificationFormPage> createState() => _CertificationFormPageState();
@@ -31,6 +35,25 @@ class _CertificationFormPageState extends State<CertificationFormPage> {
 
   // controller biar teks di kolom tanggal bisa diisi dari date picker
   final TextEditingController _dateController = TextEditingController();
+
+  // true kalau form dibuka buat ngedit
+  bool get _isEditing => widget.certification != null;
+
+  @override
+  void initState() {
+    super.initState();
+    // mode edit: isi variabel dari data sertifikat yang lama
+    final cert = widget.certification;
+    if (cert != null) {
+      _title = cert.title;
+      _issuer = cert.issuer;
+      _credentialId = cert.credentialId;
+      _issueDate = DateTime.tryParse(cert.issueDate);
+      if (_issueDate != null) {
+        _dateController.text = _formatDate(_issueDate!);
+      }
+    }
+  }
 
   @override
   void dispose() {
@@ -71,7 +94,7 @@ class _CertificationFormPageState extends State<CertificationFormPage> {
     }
   }
 
-  // kosongin semua isian form
+  // kosongin semua isian form (dipakai di mode tambah)
   void _resetForm() {
     _formKey.currentState!.reset();
     setState(() {
@@ -96,28 +119,56 @@ class _CertificationFormPageState extends State<CertificationFormPage> {
     final auth = context.read<AuthState>();
     final api = context.read<ApiClient>();
     final messenger = ScaffoldMessenger.of(context);
+    final navigator = Navigator.of(context);
+    final old = widget.certification;
 
     setState(() {
       _submitting = true;
     });
 
     try {
-      // 3. kirim ke server pakai token
-      final created = await api.createCertification(
-        Certification(
-          title: _title.trim(),
-          issuer: _issuer.trim(),
-          issueDate: _formatApiDate(_issueDate!),
-          credentialId: _credentialId.trim(),
-        ),
-        token: auth.token!,
-        password: _password,
+      final cert = Certification(
+        title: _title.trim(),
+        issuer: _issuer.trim(),
+        issueDate: _formatApiDate(_issueDate!),
+        credentialId: _credentialId.trim(),
+        // field yang gak ada di form dibawa dari data lama, biar gak ketimpa kosong
+        description: old?.description ?? '',
+        image: old?.image ?? '',
       );
-      if (!mounted) return;
-      setState(() {
-        _submitting = false;
-      });
-      _showSuccessDialog(created);
+
+      if (old != null) {
+        // 3a. mode edit: kirim PATCH ke server pakai token
+        final updated = await api.updateCertification(
+          old.id!,
+          cert,
+          token: auth.token!,
+          password: _password,
+        );
+        if (!mounted) return;
+        setState(() {
+          _submitting = false;
+        });
+        messenger
+          ..hideCurrentSnackBar()
+          ..showSnackBar(
+            const SnackBar(content: Text('Sertifikat berhasil diperbarui.')),
+          );
+        // balik ke detail sambil bawa data yang baru
+        navigator.pop(updated);
+      } else {
+        // 3b. mode tambah: kirim POST ke server pakai token
+        final created = await api.createCertification(
+          cert,
+          token: auth.token!,
+          password: _password,
+        );
+        if (!mounted) return;
+        setState(() {
+          _submitting = false;
+        });
+        _showSuccessDialog(created);
+      }
     } on ApiException catch (e) {
       if (!mounted) return;
       setState(() {
@@ -135,7 +186,7 @@ class _CertificationFormPageState extends State<CertificationFormPage> {
     }
   }
 
-  // dialog konfirmasi kalau data sukses disimpan di server
+  // dialog konfirmasi kalau data sukses disimpan di server (mode tambah)
   void _showSuccessDialog(Certification created) {
     showDialog(
       context: context,
@@ -169,8 +220,7 @@ class _CertificationFormPageState extends State<CertificationFormPage> {
               child: const Text('Lihat Daftar'),
               onPressed: () {
                 // tutup dialog, kosongin form, lalu buka daftar (datanya diambil ulang)
-                final navigator = Navigator.of(dialogContext);
-                navigator.pop();
+                Navigator.of(dialogContext).pop();
                 _resetForm();
                 Navigator.push(
                   context,
@@ -191,9 +241,12 @@ class _CertificationFormPageState extends State<CertificationFormPage> {
     return Scaffold(
       // AppBar pakai warna tema yang sama kayak halaman utama
       appBar: AppBar(
-        title: const Text(
-          'Add Certification',
-          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+        title: Text(
+          _isEditing ? 'Edit Certification' : 'Add Certification',
+          style: const TextStyle(
+            color: Colors.white,
+            fontWeight: FontWeight.bold,
+          ),
         ),
         backgroundColor: Theme.of(context).colorScheme.primary,
         iconTheme: const IconThemeData(color: Colors.white),
@@ -212,6 +265,7 @@ class _CertificationFormPageState extends State<CertificationFormPage> {
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: TextFormField(
+                  initialValue: widget.certification?.title,
                   decoration: InputDecoration(
                     hintText: "Contoh: TOEFL ITP",
                     labelText: "Nama Sertifikat",
@@ -244,6 +298,7 @@ class _CertificationFormPageState extends State<CertificationFormPage> {
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: TextFormField(
+                  initialValue: widget.certification?.issuer,
                   decoration: InputDecoration(
                     hintText: "Contoh: Educational Testing Service",
                     labelText: "Penerbit",
@@ -301,6 +356,7 @@ class _CertificationFormPageState extends State<CertificationFormPage> {
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: TextFormField(
+                  initialValue: widget.certification?.credentialId,
                   decoration: InputDecoration(
                     hintText: "Contoh: ABC-12345 (opsional)",
                     labelText: "ID Kredensial",
@@ -373,9 +429,9 @@ class _CertificationFormPageState extends State<CertificationFormPage> {
                               color: Colors.white,
                             ),
                           )
-                        : const Text(
-                            "Simpan",
-                            style: TextStyle(color: Colors.white),
+                        : Text(
+                            _isEditing ? "Simpan Perubahan" : "Simpan",
+                            style: const TextStyle(color: Colors.white),
                           ),
                   ),
                 ),
