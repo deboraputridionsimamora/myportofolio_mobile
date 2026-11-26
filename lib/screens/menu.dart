@@ -22,6 +22,11 @@ class MyHomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // lebar layar dipakai buat nentuin jumlah kolom
+    // layar lebar (laptop) = 4 kolom sebaris, layar sempit (HP) = 2 kolom (2 atas 2 bawah)
+    final double lebarLayar = MediaQuery.of(context).size.width;
+    final int jumlahKolom = lebarLayar >= 800 ? 4 : 2;
+
     // Scaffold ngasih kerangka halaman (AppBar, body, SnackBar)
     return Scaffold(
       // AppBar = bar di bagian atas halaman
@@ -39,7 +44,7 @@ class MyHomePage extends StatelessWidget {
         // Center + ConstrainedBox biar isinya gak melebar banget di layar besar
         child: Center(
           child: ConstrainedBox(
-            constraints: const BoxConstraints(maxWidth: 700),
+            constraints: const BoxConstraints(maxWidth: 1100),
             child: Padding(
               padding: const EdgeInsets.all(16.0),
               child: Column(
@@ -75,14 +80,14 @@ class MyHomePage extends StatelessWidget {
                     ),
                   ),
 
-                  // GridView 2 kolom: 4 tombol jadi 2 di atas dan 2 di bawah
+                  // GridView: jumlah kolomnya ngikutin lebar layar (4 atau 2)
                   GridView.count(
                     padding: const EdgeInsets.all(20),
                     crossAxisSpacing: 10,
                     mainAxisSpacing: 10,
-                    crossAxisCount: 2,
-                    // kartu dibuat agak lebar (bukan kotak) biar gak terlalu tinggi
-                    childAspectRatio: 1.5,
+                    crossAxisCount: jumlahKolom,
+                    // 4 kolom kartunya lebih kecil, jadi rasionya dibedain biar tinggi pas
+                    childAspectRatio: jumlahKolom == 4 ? 1.3 : 1.5,
                     // shrinkWrap biar tinggi grid ngikutin isinya
                     shrinkWrap: true,
                     // scroll-nya diserahin ke SingleChildScrollView di atas
